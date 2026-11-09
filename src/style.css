@@ -1,0 +1,206 @@
+:root {
+  font-family: Arial, sans-serif;
+  color: #e5e7eb;
+  background-color: #0f172a;
+}
+
+body {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px 20px;
+}
+
+h1 {
+  color: #38bdf8;
+  font-size: 36px;
+  text-align: center;
+}
+
+h2 {
+  color: #7dd3fc;
+  margin-top: 32px;
+}
+
+section {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 24px;
+  background-color: #1e293b;
+  border-radius: 12px;
+}
+
+select,
+input,
+button {
+  padding: 10px 14px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #475569;
+}
+
+input,
+select {
+  background-color: #334155;
+  color: white;
+}
+
+button {
+  background-color: #0284c7;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+  background-color: #0369a1;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+ol {
+  padding-left: 30px;
+  line-height: 2;
+}
+
+@media (max-width: 600px) {
+  body {
+    padding: 16px;
+  }
+
+  section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.game-layout {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.panel {
+  min-width: 0;
+  padding: 24px;
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+}
+
+.play-panel {
+  grid-column: 1 / -1;
+}
+
+.guess-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.guess-controls input {
+  width: 160px;
+}
+
+.game-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  color: #94a3b8;
+}
+
+.panel h2 {
+  margin-top: 0;
+}
+
+.panel ol {
+  margin-bottom: 0;
+}
+
+@media (max-width: 600px) {
+  .game-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .play-panel {
+    grid-column: auto;
+  }
+
+  .guess-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .guess-controls input {
+    box-sizing: border-box;
+    width: 100%;
+  }
+}
+
+.history-entry {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 0;
+  border-bottom: 1px solid #334155;
+}
+
+.history-entry:last-child {
+  border-bottom: none;
+}
+
+.guess-value {
+  min-width: 65px;
+  letter-spacing: 2px;
+  font-variant-numeric: tabular-nums;
+}
+
+.result-tag {
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.result-tag--bulls {
+  background-color: #14532d;
+  color: #bbf7d0;
+}
+
+.result-tag--cows {
+  background-color: #78350f;
+  color: #fde68a;
+}
+
+.high-score-entry {
+  padding: 12px 0;
+  border-bottom: 1px solid #334155;
+}
+
+.high-score-entry::marker {
+  color: #94a3b8;
+}
+
+.high-score-entry:last-child {
+  border-bottom: none;
+}
+
+.high-score-entry strong {
+  font-weight: 600;
+}
+
+.high-score-time {
+  float: right;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background-color: #334155;
+  color: #bae6fd;
+  font-size: 14px;
+  font-weight: 600;
+}
