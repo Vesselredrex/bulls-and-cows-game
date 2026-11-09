@@ -1,4 +1,4 @@
-import { createDigitValidator } from './createDigitValidator';
+import { createDigitValidator } from './createDigitValidator.js';
 
 export function isValidGuess(guess: string, length: number, base: number): boolean {
   if (
@@ -12,8 +12,11 @@ export function isValidGuess(guess: string, length: number, base: number): boole
     return false;
   }
 
-  const isValidDigit = createDigitValidator(base);
-  const normalizedGuess = guess.toLowerCase();
+  const digits = [...guess.toLowerCase()];
+  const validateDigit = createDigitValidator(base);
 
-  return [...normalizedGuess].every(isValidDigit) && new Set(normalizedGuess).size === length;
+  const hasValidDigits = digits.every(validateDigit);
+  const hasUniqueDigits = new Set(digits).size === digits.length;
+
+  return hasValidDigits && hasUniqueDigits;
 }
