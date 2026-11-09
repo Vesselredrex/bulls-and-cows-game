@@ -1,6 +1,7 @@
 import { generateSecret } from './game/generateSecret.js';
 import { isValidGuess } from './game/isValidGuess.js';
 import { evaluateGuess } from './game/evaluateGuess.js';
+import { getTopScores, loadHighScores, saveHighScore } from './game/highScores.js';
 
 const heading = document.createElement('h1');
 heading.textContent = 'Bulls and Cows';
@@ -126,6 +127,38 @@ function updateTimer(): void {
   timerInfo.textContent = `Elapsed: ${elapsedSeconds}s`;
 }
 
+const highScoresHeading = document.createElement('h2');
+highScoresHeading.textContent = 'High Scores';
+
+const highScoresList = document.createElement('ol');
+
+const highScoresMessage = document.createElement('p');
+
+function renderHighScores(): void {
+  const base = Number(baseSelect.value);
+  const length = Number(lengthSelect.value);
+
+  const scores = getTopScores(loadHighScores(), base, length);
+
+  const items = scores.map((score) => {
+    const item = document.createElement('li');
+
+    item.textContent = `${score.attempts} attempts — ${score.elapsedSeconds}s`;
+
+    return item;
+  });
+
+  highScoresList.replaceChildren(...items);
+
+  highScoresMessage.textContent =
+    scores.length === 0
+      ? 'No records yet for these settings.'
+      : `Best results for base ${base}, length ${length}`;
+}
+
+baseSelect.addEventListener('change', renderHighScores);
+lengthSelect.addEventListener('change', renderHighScores);
+
 startButton.addEventListener('click', () => {
   if (gameState !== null) {
     return;
@@ -214,7 +247,22 @@ guessButton.addEventListener('click', () => {
 
     updateTimer();
 
-    gameStatus.textContent = 'Congratulations! You guessed the secret!';
+    const elapsedSeconds = Math.floor((Date.now() - currentGame.startedAt) / 1000);
+
+    const saved = saveHighScore({
+      base: currentGame.base,
+      length: currentGame.length,
+      attempts: updatedGame.history.length,
+      elapsedSeconds,
+      completedAt: new Date().toISOString(),
+    });
+
+    renderHighScores();
+
+    gameStatus.textContent = saved
+      ? 'Congratulations! Your result has been saved!'
+      : 'Congratulations! You won, but your result could not be saved.';
+
     guessInput.disabled = true;
     guessButton.disabled = true;
   }
@@ -259,4 +307,11 @@ document.body.append(
   historyList,
   attemptsInfo,
   timerInfo,
+  highScoresHeading,
+  highScoresMessage,
+  highScoresList,
 );
+
+renderHighScores();
+
+renderHighScores();
