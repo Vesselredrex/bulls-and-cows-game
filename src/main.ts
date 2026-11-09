@@ -1,3 +1,5 @@
+import './style.css';
+
 import { generateSecret } from './game/generateSecret.js';
 import { isValidGuess } from './game/isValidGuess.js';
 import { evaluateGuess } from './game/evaluateGuess.js';
@@ -142,8 +144,16 @@ function renderHighScores(): void {
 
   const items = scores.map((score) => {
     const item = document.createElement('li');
+    item.className = 'high-score-entry';
 
-    item.textContent = `${score.attempts} attempts — ${score.elapsedSeconds}s`;
+    const attempts = document.createElement('strong');
+    attempts.textContent = `${score.attempts} ${score.attempts === 1 ? 'attempt' : 'attempts'}`;
+
+    const time = document.createElement('span');
+    time.className = 'high-score-time';
+    time.textContent = `${score.elapsedSeconds}s`;
+
+    item.append(attempts, time);
 
     return item;
   });
@@ -229,7 +239,22 @@ guessButton.addEventListener('click', () => {
   historyList.replaceChildren(
     ...updatedGame.history.map((item) => {
       const listItem = document.createElement('li');
-      listItem.textContent = `${item.guess} — Bulls: ${item.bulls}, Cows: ${item.cows}`;
+      listItem.className = 'history-entry';
+
+      const guessValue = document.createElement('strong');
+      guessValue.className = 'guess-value';
+      guessValue.textContent = item.guess.toUpperCase();
+
+      const bullsTag = document.createElement('span');
+      bullsTag.className = 'result-tag result-tag--bulls';
+      bullsTag.textContent = `Bulls: ${item.bulls}`;
+
+      const cowsTag = document.createElement('span');
+      cowsTag.className = 'result-tag result-tag--cows';
+      cowsTag.textContent = `Cows: ${item.cows}`;
+
+      listItem.append(guessValue, bullsTag, cowsTag);
+
       return listItem;
     }),
   );
@@ -295,23 +320,35 @@ newGameButton.addEventListener('click', () => {
 });
 
 settings.append(baseLabel, baseSelect, lengthLabel, lengthSelect, startButton, newGameButton);
-document.body.append(
-  heading,
-  settings,
-  gameStatus,
-  guessLabel,
-  guessInput,
-  guessButton,
-  guessResult,
-  historyHeading,
-  historyList,
-  attemptsInfo,
-  timerInfo,
-  highScoresHeading,
-  highScoresMessage,
-  highScoresList,
-);
 
-renderHighScores();
+const main = document.createElement('main');
+main.className = 'game-layout';
+
+const playPanel = document.createElement('div');
+playPanel.className = 'panel play-panel';
+
+const guessControls = document.createElement('div');
+guessControls.className = 'guess-controls';
+
+guessControls.append(guessLabel, guessInput, guessButton);
+playPanel.append(gameStatus, guessControls, guessResult);
+
+const historyPanel = document.createElement('div');
+historyPanel.className = 'panel';
+
+const stats = document.createElement('div');
+stats.className = 'game-stats';
+
+stats.append(attemptsInfo, timerInfo);
+historyPanel.append(historyHeading, stats, historyList);
+
+const scoresPanel = document.createElement('div');
+scoresPanel.className = 'panel';
+
+scoresPanel.append(highScoresHeading, highScoresMessage, highScoresList);
+
+main.append(playPanel, historyPanel, scoresPanel);
+
+document.body.append(heading, settings, main);
 
 renderHighScores();
